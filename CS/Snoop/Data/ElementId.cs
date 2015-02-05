@@ -1,6 +1,6 @@
 #region Header
 //
-// Copyright 2003-2013 by Autodesk, Inc. 
+// Copyright 2003-2015 by Autodesk, Inc. 
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted, 
@@ -26,7 +26,6 @@ using System;
 using System.Windows.Forms;
 using System.Collections;
 
-using Autodesk.Revit;
 using Autodesk.Revit.DB;
 
 namespace RevitLookup.Snoop.Data
@@ -44,8 +43,16 @@ namespace RevitLookup.Snoop.Data
 		ElementId(string label, Autodesk.Revit.DB.ElementId val, Document doc)
 		:   base(label)
 		{
-		    m_val = val;
-			m_elem = doc.GetElement(val);	// TBD: strange signature!
+		   m_val = val;
+         try
+         {
+            if (val != Autodesk.Revit.DB.ElementId.InvalidElementId)
+               m_elem = doc.GetElement(val);	// TBD: strange signature!
+         }
+         catch (System.Exception)
+         {
+            m_elem = null;
+         }
 		}
 		
         public override string

@@ -1,6 +1,6 @@
 #region Header
 //
-// Copyright 2003-2013 by Autodesk, Inc. 
+// Copyright 2003-2015 by Autodesk, Inc. 
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted, 
@@ -93,7 +93,7 @@ namespace RevitLookup.Test
       public void
       LinearArray()
       {
-         if (!m_revitApp.ActiveUIDocument.Selection.Elements.IsEmpty)
+         if (m_revitApp.ActiveUIDocument.Selection.GetElementIds().Count > 0)
          {
             Autodesk.Revit.DB.LinearArray.Create(
                m_revitApp.ActiveUIDocument.Document,
@@ -106,7 +106,7 @@ namespace RevitLookup.Test
       public void
       RadialArray()
       {
-         if (!m_revitApp.ActiveUIDocument.Selection.Elements.IsEmpty)
+         if (m_revitApp.ActiveUIDocument.Selection.GetElementIds().Count > 0)
          {
             Autodesk.Revit.DB.View view = m_revitApp.ActiveUIDocument.Document.ActiveView;
             XYZ axisDir = null;
@@ -133,7 +133,7 @@ namespace RevitLookup.Test
       public void
       ArrayWithoutAssociate()
       {
-         if (!m_revitApp.ActiveUIDocument.Selection.Elements.IsEmpty)
+         if (m_revitApp.ActiveUIDocument.Selection.GetElementIds().Count > 0)
          {
             Autodesk.Revit.DB.LinearArray.ArrayElementsWithoutAssociation(
                m_revitApp.ActiveUIDocument.Document,
@@ -340,48 +340,50 @@ namespace RevitLookup.Test
          else
             return;
 
-         Transaction transaction = new Transaction(m_revitApp.ActiveUIDocument.Document, "AddFamilyParameterAndType");
-         transaction.Start();
+         using( Transaction transaction = new Transaction( m_revitApp.ActiveUIDocument.Document ) )
+         {
+           transaction.Start( "AddFamilyParameterAndType" );
 
-         if (doc.IsFamilyDocument)
-         { // has to be a family document to be able to use the Family Manager.
+           if( doc.IsFamilyDocument )
+           { // has to be a family document to be able to use the Family Manager.
 
-            FamilyManager famMgr = doc.FamilyManager;
+             FamilyManager famMgr = doc.FamilyManager;
 
-            //Add a family param. 
-            FamilyParameter famParam = famMgr.AddParameter("RevitLookup_Param", BuiltInParameterGroup.PG_TITLE, ParameterType.Text, false);
-            famMgr.Set(famParam, "Default text.");
+             //Add a family param. 
+             FamilyParameter famParam = famMgr.AddParameter( "RevitLookup_Param", BuiltInParameterGroup.PG_TITLE, ParameterType.Text, false );
+             famMgr.Set( famParam, "Default text." );
 
-            //Create a couple of new family types. Note that we can set different values for the param
-            //in different family types.                
+             //Create a couple of new family types. Note that we can set different values for the param
+             //in different family types.                
 
-            FamilyType newFamType = famMgr.NewType("RevitLookup_Type1");
-            famMgr.CurrentType = newFamType;
+             FamilyType newFamType = famMgr.NewType( "RevitLookup_Type1" );
+             famMgr.CurrentType = newFamType;
 
-            if (newFamType.HasValue(famParam))
-            {
-               famMgr.Set(famParam, "Text1.");
-            }
+             if( newFamType.HasValue( famParam ) )
+             {
+               famMgr.Set( famParam, "Text1." );
+             }
 
-            FamilyType newFamType1 = famMgr.NewType("RevitLookup_Type2");
-            famMgr.CurrentType = newFamType;
+             FamilyType newFamType1 = famMgr.NewType( "RevitLookup_Type2" );
+             famMgr.CurrentType = newFamType;
 
-            if (newFamType.HasValue(famParam))
-            {
-               famMgr.Set(famParam, "Text2.");
-            }
+             if( newFamType.HasValue( famParam ) )
+             {
+               famMgr.Set( famParam, "Text2." );
+             }
 
-            famMgr.MakeType(famParam);
+             famMgr.MakeType( famParam );
 
-            if ((famParam != null) && (newFamType != null))
-            {
-               MessageBox.Show("New family types/params added successfully.", "RevitLookup", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-               MessageBox.Show("Family types/params addition failed.", "RevitLookup", MessageBoxButtons.OK, MessageBoxIcon.Error);
+             if( ( famParam != null ) && ( newFamType != null ) )
+             {
+               MessageBox.Show( "New family types/params added successfully.", "RevitLookup", MessageBoxButtons.OK, MessageBoxIcon.Information );
+             }
+             else
+               MessageBox.Show( "Family types/params addition failed.", "RevitLookup", MessageBoxButtons.OK, MessageBoxIcon.Error );
+           }
+
+           transaction.Commit();
          }
-
-         transaction.Commit();
       }
    }
 }

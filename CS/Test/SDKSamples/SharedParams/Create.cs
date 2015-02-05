@@ -1,6 +1,6 @@
 #region Header
 //
-// Copyright 2003-2013 by Autodesk, Inc. 
+// Copyright 2003-2015 by Autodesk, Inc. 
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted, 
@@ -29,7 +29,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-using Autodesk.Revit;
 using Autodesk.Revit.DB;
 
 namespace RevitLookup.Test.SDKSamples.SharedParams
@@ -76,7 +75,11 @@ namespace RevitLookup.Test.SDKSamples.SharedParams
          Definition sharedParameterDefinition = sharedParameterGroup.Definitions.get_Item(m_paramName);
          if (sharedParameterDefinition == null)
          {
-            sharedParameterDefinition = sharedParameterGroup.Definitions.Create(m_paramName, ParameterType.Text, true);
+           //sharedParameterDefinition = sharedParameterGroup.Definitions.Create( m_paramName, ParameterType.Text, true ); // 2015, jeremy: 'Autodesk.Revit.DB.Definitions.Create(string, Autodesk.Revit.DB.ParameterType, bool)' is obsolete: 'This method is deprecated in Revit 2015. Use Create(Autodesk.Revit.DB.ExternalDefinitonCreationOptions) instead'
+           ExternalDefinitonCreationOptions opt = new ExternalDefinitonCreationOptions( m_paramName, ParameterType.Text );
+           opt.Visible = true;
+           sharedParameterDefinition = sharedParameterGroup.Definitions.Create( opt ); // 2016, jeremy
+
          }
 
          // create a category set with the wall category in it

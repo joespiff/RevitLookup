@@ -1,6 +1,6 @@
 #region Header
 //
-// Copyright 2003-2013 by Autodesk, Inc. 
+// Copyright 2003-2015 by Autodesk, Inc. 
 //
 // Permission to use, copy, modify, and distribute this software in
 // object code form for any purpose and without fee is hereby granted, 
@@ -27,7 +27,6 @@ using System.Collections;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-using Autodesk.Revit;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.DB.Structure;
@@ -605,9 +604,21 @@ namespace RevitLookup.Snoop.CollectorExts
       {
          data.Add(new Snoop.Data.ClassSeparator(typeof(FormatOptions)));
 
-         data.Add(new Snoop.Data.String("Name", opt.GetName()));
-         data.Add(new Snoop.Data.String("Units", opt.DisplayUnits.ToString()));
-         data.Add(new Snoop.Data.Double("Rounding", opt.Accuracy));
+         //data.Add( new Snoop.Data.String( "Name", opt.GetName() ) ); // 2015, jeremy: 'Autodesk.Revit.DB.FormatOptions.GetName()' is obsolete: 'This method is deprecated in Revit 2015.  Use UnitUtils.GetTypeCatalogString(DisplayUnitType) instead.'
+         data.Add( new Snoop.Data.String( "Name", UnitUtils.GetTypeCatalogString(opt.DisplayUnits) ) ); // 2016
+
+ 		 data.Add(new Snoop.Data.Bool("Use default", opt.UseDefault));
+         if (!opt.UseDefault)
+         {
+            data.Add(new Snoop.Data.String("Units", opt.DisplayUnits.ToString()));
+            data.Add(new Snoop.Data.String("Unit symbol", opt.UnitSymbol.ToString()));
+            data.Add(new Snoop.Data.Double("Rounding", opt.Accuracy));
+            data.Add(new Snoop.Data.Bool("Suppress trailing zeros", opt.SuppressTrailingZeros));
+            data.Add(new Snoop.Data.Bool("Suppress leading zeros", opt.SuppressLeadingZeros));
+            data.Add(new Snoop.Data.Bool("Suppress spaces", opt.SuppressSpaces));
+            data.Add(new Snoop.Data.Bool("Use plus prefix", opt.UsePlusPrefix));
+            data.Add(new Snoop.Data.Bool("Use digit grouping", opt.UseDigitGrouping));
+         }
       }
 
       private void
