@@ -28,11 +28,11 @@ using System.Runtime.CompilerServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle( "RevitLookup External Application Add-In" )]
-[assembly: AssemblyDescription( "Interactive Revit BIM database exploration tool to view and navigate element properties and relationships." )]
+[assembly: AssemblyTitle( "RevitLookup" )]
+[assembly: AssemblyDescription( "Revit add-in interactive BIM database exploration tool to view and navigate element properties and relationships." )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "Autodesk Inc." )]
-[assembly: AssemblyProduct( "RevitLookup External Application Add-In" )]
+[assembly: AssemblyProduct( "RevitLookup" )]
 [assembly: AssemblyCopyright( "Copyright 2003-2015 (C) Autodesk Inc." )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
@@ -88,6 +88,14 @@ using System.Runtime.CompilerServices;
 // 2015-01-13 - 2015.0.0.5 - added CategoryType to the CategoryCollector
 // 2015-01-29 - 2015.0.0.6 - incremented copyright message year from 2014 to 2015
 // 2015-01-30 - 2015.0.0.7 - removed all statements 'using' the empty root namespace Autodesk.Revit
+// 2015-04-19 - 2015.0.0.8 - integrated pull request #6 by yzraeu, additinal try catch for Level Offset and MEP System
+// 2015-04-20 - 2016.0.0.3 - initial migration to Revit 2016 by @ElaineJieyanZheng
+// 2015-04-20 - 2016.0.0.4 - integrated changes from previous Revit 2016 version into elaine's one
+// 2015-04-21 - 2016.0.0.5 - initial migration to Revit 2016 - first public release
+// 2015-04-21 - 2016.0.0.6 - set Copy Local false on Revit API assemblies
+// 2015-04-23 - 2016.0.0.7 - updated post-build event target path to Revit 2016 add-ins folder
+// 2015-05-15 - 2016.0.0.8 - updated Revit API assembly paths for final release of Revit 2016
+// 2015-05-21 - 2016.0.0.9 - display all the display names of the BuiltInParameter enumeration value
 //
-[assembly: AssemblyVersion( "2015.0.0.7" )]
-[assembly: AssemblyFileVersion( "2015.0.0.7" )]
+[assembly: AssemblyVersion( "2016.0.0.9" )]
+[assembly: AssemblyFileVersion( "2016.0.0.9" )]
